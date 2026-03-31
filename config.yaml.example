@@ -1,0 +1,11 @@
+entries:
+  - target:
+      type: gvc
+      name: example-gvc
+    secret: shared-secret
+  - target:
+      type: workload
+      name: api
+      gvc: example-gvc
+      container: app
+    secret: shared-secret

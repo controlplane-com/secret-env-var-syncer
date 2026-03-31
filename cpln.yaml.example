@@ -1,0 +1,61 @@
+kind: gvc
+name: secret-env-var-syncer
+description: secret-env-var-syncer
+tags: {}
+spec:
+  endpointNamingFormat: org
+  staticPlacement:
+    locationLinks:
+      - //location/gcp-us-central1
+---
+kind: workload
+name: secret-env-var-syncer
+description: secret-env-var-syncer
+tags: {}
+spec:
+  type: cron
+  containers:
+    - name: secret-env-var-syncer
+      cpu: 100m
+      image: //image/secret-env-var-syncer:0.1
+      inheritEnv: false
+      memory: 256Mi
+      volumes:
+        - path: /app/config.yaml
+          recoveryPolicy: retain
+          uri: cpln://secret/secret-env-var-syncer-config
+  defaultOptions:
+    autoscaling:
+      maxConcurrency: 0
+      maxScale: 5
+      metric: concurrency
+      minScale: 1
+      scaleToZeroDelay: 300
+      target: 95
+    capacityAI: false
+    debug: false
+    suspend: true
+    timeoutSeconds: 30
+  firewallConfig:
+    external:
+      inboundAllowCIDR: []
+      inboundBlockedCIDR: []
+      outboundAllowCIDR: []
+      outboundAllowHostname: []
+      outboundAllowPort: []
+      outboundBlockedCIDR: []
+    internal:
+      inboundAllowType: none
+      inboundAllowWorkload: []
+  identityLink: //gvc/secret-env-var-syncer/identity/secret-env-var-syncer
+  job:
+    concurrencyPolicy: Forbid
+    historyLimit: 5
+    restartPolicy: Never
+    schedule: '* * * * *'
+  supportDynamicTags: false
+---
+kind: identity
+name: secret-env-var-syncer
+description: secret-env-var-syncer
+tags: {}
