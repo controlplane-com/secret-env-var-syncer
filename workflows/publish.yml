@@ -48,7 +48,7 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ghcr.io/controlplane-com/cpln-build/external-secret-syncer:${{ steps.version.outputs.tag }}
+          tags: ghcr.io/controlplane-com/cpln-build/secret-env-var-syncer:${{ steps.version.outputs.tag }}
           build-args: IMAGE_VERSION=${{ steps.version.outputs.tag }}
 
       - name: Create and push git tag
